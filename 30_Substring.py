@@ -7,6 +7,18 @@ class Solution(object):
                 res.append(i)
         return res
 
+    def get_word_index(self, s, words):
+        word_index = dict()
+        i = 0
+        while i < len(s):
+            for word in words:
+                if s[i:i + len(word)] == word:
+                    word_index.setdefault(i, [word])
+                    break
+            i += 1
+
+        return word_index
+
     def findSubstring(self, s, words):
         """
         :type s: str
@@ -15,26 +27,28 @@ class Solution(object):
         """
         length = sum([len(e) for e in words])
         res = []
-        index = []
-
-        # 第一步获取index
-        for word in words:
-            index.append(self.get_index(s, word))
-        for ind in index:
-            if len(ind) < 1:
-                return []
-        # 构建word和index 的dict
-        word_index = dict()
-
-        for i, ind in enumerate(index):
-            for j in ind:
-                if j in word_index.keys():
-                    if words[i] not in word_index[j]:
-                        word_index[j].append(words[i])
-                else:
-                    word_index.setdefault(j, [words[i]])
-
-        print(word_index)
+        # index = []
+        #
+        # # 第一步获取index
+        # for word in words:
+        #     index.append(self.get_index(s, word))
+        # for ind in index:
+        #     if len(ind) < 1:
+        #         return []
+        # # 构建word和index 的dict
+        # word_index = dict()
+        #
+        # for i, ind in enumerate(index):
+        #     for j in ind:
+        #         if j in word_index.keys():
+        #             if words[i] not in word_index[j]:
+        #                 word_index[j].append(words[i])
+        #         else:
+        #             word_index.setdefault(j, [words[i]])
+        #
+        # print(len(word_index))
+        word_index = self.get_word_index(s, words)
+        print(len(word_index))
         # 第二步 遍历寻找
 
         for i in range(len(s) - length + 1):
@@ -71,11 +85,79 @@ class Solution(object):
                         words_set.append(path[-1])
                         del path[-1]
 
-        print([key for key,value in word_index.items() if len(value) > 1])
+        print([key for key, value in word_index.items() if len(value) > 1])
         return res
 
 
 if __name__ == "__main__":
     s = "ttqupktjvqeeylzkyirjnnjuhyrmrhwkaoepyzavshbquaasltdyimtpmmddtzotnsknsnkkumcooeizxmyfyrwlfbqyaetpzdetsodmahcpllqizopzhnmmodkqhdfijjbbxgqansryfhiewzgfmsscvcsfizntkpukvkkjfbjmkutitzoirgmpkfuughnrykbuwnfbqqqckjlgizqbhcqtjkosudlunookbvntodvymggwhyaodqkodygzbrtpfkbifodtszughcdpdffgvpwapdzrwtiefjomxsirrcyygdpjixrfmogctfvpafvfqksncchtgftmklysipxudfyynvoncjvsvpixrpsxumlexjyfbxbgdcfqzvfcgcuctczmtsjngxtdgtkjrnqwrxorsvvyaratwcgpurfaoyfxurgneylyvzrpwmowdqqzsyropwqewvbqojfvkqtfrkxowlmbdcdycumssdwoazhpkmkufdcwpzmnmzopdtngpcyhfwyfxhuhvecajexyfjlrkcioxywnauwfsumpbhwxnazzgwzlincurnioleblaysssejwngvdgucntdadqdxhqgwdmxonxghsmrqazldhfhuakvdbabksjgvvglkdtuxhlnhkymtgtogglmhnnrhwaetgrelkyjrlwbxxnqfjgnptzygmrpkrtezkklwiwqvursrgkyrrmgklgtaykmpgqpsacpkyhfsazmgkkadygnmnioltaczrtrtvigvpnqrncazoacpirbvapivpnwigpeeykzpxphmtjlkjnzrhaphrxeimartpxxphyheoqtjzetiuszbuokloowaqnvhkuzttgzjwssxxmftggubxeoluknkzjtldsgyygjwyctxqaqwhmzeqqrmcewepsrvkyvjgfhehbezbwxkjxqbphoromxfepappwavdhzkkflociynhpowycqmrnsveumtsmovwqhgxsuzdvmkkdjihzxyoruvlioevfbtvjzsdwugritblcltdkrtbnonydtvkwofhnzljvtceodrqrktbendtdstinosjczrsbedwzgcolugcgagmpliudbdqqvbuxumyyquawxqhtwmzwsondwiizlapibmfyyfyoaymzouulivjajzfhhnhunyeqkmojrnztnmuciopqkyqtxxbgkkczihrttiemxdgkpaoxpdnzefudcxkohmpsvjlqrpdoujykjpjaszbygycjvozfarxyakorbrhvchhowtorsqpyotjlhlskcricbwveqecsllgiexbwpsxfmgqttldvcnzgmwkcaowmafwecxdrpcwdkoxezczeqbkexwiyleknlgtnfwgwaealtzpuboytrkxphfnumxhxfanmztizykktjbpnsqgjagyhnldzkkzpnmdohmpfwcaidqvvidhilfszrvadibvxnynvkccjgftmxqhftqnhwfgpdislmnkzmxwybbjigcudsdkouxvqfdhinzvzphbdezdfanpirjnmnxcjxxbccimpjjraqsdwrhbuwtencsbrrdaocdqenewxnpzfhdbamfwkybxatbumewbjatnnylmlamrjrumfzkpxloagputwqufsnuiliwzkkswbmiimszlgolmfhhdabisrfcenzfzjxvnmfxayxlgnzssgayidibwnfbceicqizfufcwfzjlmidhrffzlpchdikhotlgbllxsotxncicnnletsdehinmsyugthnuuyrmomjeoridfthannguvvhntdvomkkhjbtzpfdgyljfgrftgnqbjzqecltqwdxhhtgwymcyzoegfjblxrogqekurflpjkwqdfodttcuhgamrezqxpyovlkoqvezgcrljgpcztxizzwsfvjdmhthsdvlbbmjeeunmjsnervdsryyohbaqwjlzgwaiijmogbcrtpwmmbffzdtggvzcgkbngexqplfvmhpizlulmztmeoukmtmsdohlugclrjhgsyorjkfvmajqogbazntfdcsxjwlcfuiasytbjayvaklpqmprckwfppfynqctklvcjofupfpppbgfpwzrivzxmexawavglqkwgprxwgnmjttbrssaqrxexvetvbbitleacvxzcmnnigozbjzrazvauctrdxzzkdbnzyodndqvjhwmqydsxbstdokilljvqkkrjauydntpwpbmnhemixfnnrxyehtvrgmcgjamyvbulegalkpvjwiwqiwupsrgyglgplsphtjuarwldnhnkrlcziwqcqzawkinvbcewnawezkhmtwwkkamuxcwpbylngylhcpgpsevrocfhbeuleghbkdsobdbjdmrhezwydtrswwbzavkfdriqwbezehikwbrcaqagjrahnbgozsvelduheaglipveqogteizobzxoceebwbgifcrjdyunprrhgzamjzckaaadehgciomnrgzwevjvnccvbdhkekufkwkqdqumhhzynawtwfojhsgkxnucxqjhotzsluesdfsqgolcvbncttmriivgagppbphmjnhmsbeyqrclsrqnkcgvnbbnhqeihlxsygethktxbwlvnbjafpvstyicqmnyykqyqxrxhlxljigylpaqhxlavtemfrkfbcgtzzthmqsvaywlqwdxuozpjddrvpwysesrelasduqdvmqlivkemjwvozmjrlijrcavpdquxgxsspdckphyyfungiyxvignkjkboavlgugalldybmwzrsozbnxyvfniqyleahsjdyjpjmnkyjmrcarfpqfnxtvotgutpmetmoiwcxidgwwkxnpofvbdqwtjfnewcjpozzmbwxgftdpsshhaciduhwdmljinuaetbqxanffjiubddidfrgbyeemrqwfkyjeabdcrihatdbwhmzodhqdnwpemljzmudmyiqpqxpjcsflegajnsmaqdhfrsednjrlrhchgttinaushwdwqszgvgnmyrrnaiyrrcbxvwgjwcdfagcqybywjmkhfcvgkvzcacbvyjgxljcnsefqheoqszaxbvfnshrsjtqkcwhqgjdaqjsxphojgoihlowfxoyihqslmbbunhudqnahuqqcgylrohxlxxweposbstyfasishkbdbrfhsqbiaauxzqeogwrarpfuipmpaovdhambtnkvpguoyyeewwhqlmkvcyneoihyivzdjjyarvppttwsrdidpuytslzhtiheegjpskpjfgzacxstacwrwxnrkmagvhkzpvohffrkmslopfhpigigfvzpibvdiheadshixavlsgzhljyvrhewcflmhhprotrtnzcnbxyufadsjcqalwynbjaksrcjnvccwgrydssksvddztfkrdasocdhthqiculzbezgwrroowtoraaifaaucfdymvirpvsqarzwiqnymiodjpnorniwvnuhieayasqajpythnstwgyfxnvpdglythhclicnaspmkofrbxnxgnefbaueghcbqldetfrwahikxnbanqyveeafgxloepqxatbwbssbbcnapobehzzlfcsmzdadsqaumdqnykozmbaerbiackljmfvnkyseotzcyrpwcfyoiyscbdcfpqodxmqikioadndchsyjawziwsmzxpemhvrehhmrpdrtsuxzpxiruizscmubdapkvgoendvegpzylwacuitqstkwhexmfmwcumhjpeoxtnyfmyjgidwdygzfnzrunpwibfrtkhsfvqkjowpzzncxvbeiaxcombypgriszdywtkfkgujfjnceqgnrfrhruhjbyttxwrtqcaciunqdaskqbxjgqsalzjoyehxbbttftvpqifviafadeklxclicwwcbfbeiuxpquficmdmolmtryfobswfrujsckykhvaxphftvkfkvtdnskbvdaauujowvmjcjlzasgtnrazmvfbnrfkufkqbvgarsjtduvdobyduyfhumkjdpuawgqycxavrjqxflavpzyjzdsvpffvubvrhlrjkrgecxbjkdebcenekfzbmgwhhrapdtanmhrqguzqyfuclhgvoixbotkylmpqfrftyzjgtkzrrtwcacaqmxrdsbbfnsxujdnkeyqziptzkpemtedgdulxyofngciphxznwqnghiisxoessjaxelwczdrfgzvpzufxmsdwclozzurtesskdrofufkchhuiezfqtimvwcuxzntfhlrnefszmebvmvdsuiiprxkpbemcufhbtaozfiyuncpbxttubdjuawlecygwfqaaqqayzasmchpcciygljcofosioagvqgyjxyhwabkdkzhnjfvuqxiwlcgzdmvvvtgutpstqcybdfqomliditbuvhvavqyslemeueamiapngfbuskzbfaxcjudhldzyjmfdqfsbfhonpqihchkhkjjteoarrapbouggbahhiwuzoegsotzycktizwzswrvmlesneawoysnozwgnpfntrgescdnawimiohxvhtlhnzvmxdzokohbxnubrhcnrqxizwdiropfpmrmptazhkdexxiqgkgzcfjccmmtdcysqshgljhutkbtjjjrvrtzxcdbpquuuvmknvsafawymztykfphwihvnmwectywomjdibfnddnsfhqpohxkseifqgjvzhtpvcudgbslhgdmptbdbyptezaxgjshsnxnqtryvjjcrnoiirnlqdewcgvkppshdpvvkotfzcjrrzbarpljushwydjosbxvsuqcijkiovbfvcfottznlgmljvbcwzxqvouezeopcpvxtcnnvmaisoucjvehwdxstsyvymkadfzwiolfaoovcixofdvcivwcpuxpghqjprhzgteihsdlcczifvmosisjerymaqvpieoqxtygncsqeramomcgwupanqmngjfontgnoftejlunfuzvidceztgmlucsfhiscphrwbvforsvnurvzvzzohlabnugucaztiqpjnuzgpvtlmokhpjxwvzxkvfhyfgrnyjyndatsvodjcqstzrpwtohotqmaygqwpoluqgnluswyiqtkiigbwpprhetfmjddaqxqwmeshasrrlbbvietzvkhbeonpsqpioghckzjmubfhcgdmmwoijxjplxedpuofavimwtasugazodnbbblkyuzktepjafqccyqbsqtoyvnnadqcebmfvorruiawoqyqrotlgnbfirujuknynbfkrwblhdhvuhnnxhaewbjgsdrmpencismzrqlytuvnekcbtcfreqywtrjiwymeqbfjrqhknearpcukfaclsahmrswpqlvjmbsdtcnigpzxsukzwmkootchmbxeounavgfrkuzqkbqexadvmnlciojurgbfdohaworgirzsupwrrbmfqxhznqvgzwncnucjiuqtnpnhgmyxnmcejjdzbafaxtckpftazltocgvisvhihjmsurrwrxwqqzahgwhhjcvmlswdnelwnzokqggkdeavfdelbmsmopabhxfwbssquhcmpkwupzpuetihhctysuzzrgwubqmvxpjoziiohxlntvucxpcpjcrckpynflifautbccqjbdywasbxhdpthixuxwhehqljkfkojcxmhvlhpmhwryrzgptflajusvfecpsnurbdomldaucsstrykmdvmorhlwnpogcizelosyrtuvlmrembqrxeiqntnbjbjnlitywmxqhrlugeyugqmfwuvkpinylwowghvdvuveniyvnyqtocylytxnekopicoolltjfonuzmqmkghbkhoialvgxlyhpmvdxpmefzyenosawzbggrojcmrbzpipddscueicfhivxbvwcyclprutfnuedevijnngtvibeqwcttyytcjivfdaszhxdcimqvsjqakvtizobxmubxexchxvgeulhcyzxqkotxjofkejjrfkokhttfoclknunntkggazdlpkvttemzpdlwwgdmirwyljlhwrpwssihcddykrzzukxssdgbwdbjomqmghjyztiewnciedhbphvhmckihlrxykkgrvetooxmbbvieejtleaxinhryzpylzecwlvkzuwdvrlbwuwjaxjlmqckrrjcspfoacaaxxduqqwmksymrhxdzcortztooaepffrccwwsmuhynfkgokknmaghbcvpcagjfzljvkdjgkhvrucfgovsqbbrdxii"
-    sub = ["wxnazzgwzlincurnioleblays","txwrtqcaciunqdaskqbxjgqsa","vdhzkkflociynhpowycqmrnsv","sondwiizlapibmfyyfyoaymzo","advmnlciojurgbfdohaworgir","gbwpprhetfmjddaqxqwmeshas","vmjcjlzasgtnrazmvfbnrfkuf","zjxvnmfxayxlgnzssgayidibw","xmsdwclozzurtesskdrofufkc","gglmhnnrhwaetgrelkyjrlwbx","galldybmwzrsozbnxyvfniqyl","ofrbxnxgnefbaueghcbqldetf","ltaczrtrtvigvpnqrncazoacp","psacpkyhfsazmgkkadygnmnio","mztmeoukmtmsdohlugclrjhgs","gjdaqjsxphojgoihlowfxoyih","gpcztxizzwsfvjdmhthsdvlbb","bksjgvvglkdtuxhlnhkymtgto","mewbjatnnylmlamrjrumfzkpx","orsqpyotjlhlskcricbwveqec","wsrdidpuytslzhtiheegjpskp","zehikwbrcaqagjrahnbgozsve","lzjoyehxbbttftvpqifviafad","phyyfungiyxvignkjkboavlgu","zdadsqaumdqnykozmbaerbiac","zxyoruvlioevfbtvjzsdwugri","xtvotgutpmetmoiwcxidgwwkx","cpvxtcnnvmaisoucjvehwdxst","jfgzacxstacwrwxnrkmagvhkz","nubrhcnrqxizwdiropfpmrmpt","rwahikxnbanqyveeafgxloepq","zncxvbeiaxcombypgriszdywt","ottznlgmljvbcwzxqvouezeop","rqguzqyfuclhgvoixbotkylmp","zdsvpffvubvrhlrjkrgecxbjk","kqbvgarsjtduvdobyduyfhumk","azhkdexxiqgkgzcfjccmmtdcy","igcudsdkouxvqfdhinzvzphbd","igylpaqhxlavtemfrkfbcgtzz","ezdfanpirjnmnxcjxxbccimpj","hwydjosbxvsuqcijkiovbfvcf","lzgwaiijmogbcrtpwmmbffzdt","fsqgolcvbncttmriivgagppbp","hsqbiaauxzqeogwrarpfuipmp","mxonxghsmrqazldhfhuakvdba","legajnsmaqdhfrsednjrlrhch","eebwbgifcrjdyunprrhgzamjz","suxzpxiruizscmubdapkvgoen","uvnekcbtcfreqywtrjiwymeqb","pquuuvmknvsafawymztykfphw","bhxfwbssquhcmpkwupzpuetih","pshdpvvkotfzcjrrzbarpljus","edgdulxyofngciphxznwqnghi","pwzrivzxmexawavglqkwgprxw","wimiohxvhtlhnzvmxdzokohbx","sjcqalwynbjaksrcjnvccwgry","qwfkyjeabdcrihatdbwhmzodh","thmqsvaywlqwdxuozpjddrvpw","jdpuawgqycxavrjqxflavpzyj","xphftvkfkvtdnskbvdaauujow","mwkcaowmafwecxdrpcwdkoxez","rrlbbvietzvkhbeonpsqpiogh","gyglgplsphtjuarwldnhnkrlc","sqshgljhutkbtjjjrvrtzxcdb","ihvnmwectywomjdibfnddnsfh","dymvirpvsqarzwiqnymiodjpn","evrocfhbeuleghbkdsobdbjdm","sbbfnsxujdnkeyqziptzkpemt","gmlucsfhiscphrwbvforsvnur","nfbceicqizfufcwfzjlmidhrf","tbqxanffjiubddidfrgbyeemr","fszmebvmvdsuiiprxkpbemcuf","ziwqcqzawkinvbcewnawezkhm","dmolmtryfobswfrujsckykhva","ewcflmhhprotrtnzcnbxyufad","qcebmfvorruiawoqyqrotlgnb","qdnwpemljzmudmyiqpqxpjcsf","xhaewbjgsdrmpencismzrqlyt","iyrrcbxvwgjwcdfagcqybywjm","rhezwydtrswwbzavkfdriqwbe","kljmfvnkyseotzcyrpwcfyoiy","xtygncsqeramomcgwupanqmng","uzoegsotzycktizwzswrvmles","fzlpchdikhotlgbllxsotxnci","rrwrxwqqzahgwhhjcvmlswdne","xtckpftazltocgvisvhihjmsu","aovdhambtnkvpguoyyeewwhql","qenewxnpzfhdbamfwkybxatbu","wqvursrgkyrrmgklgtaykmpgq","ezbwxkjxqbphoromxfepappwa","mzeqqrmcewepsrvkyvjgfhehb","ulzbezgwrroowtoraaifaaucf","rdxzzkdbnzyodndqvjhwmqyds","qtryvjjcrnoiirnlqdewcgvkp","slemeueamiapngfbuskzbfaxc","ssejwngvdgucntdadqdxhqgwd","lhgdmptbdbyptezaxgjshsnxn","qheoqszaxbvfnshrsjtqkcwhq","twwkkamuxcwpbylngylhcpgps","fszrvadibvxnynvkccjgftmxq","hftqnhwfgpdislmnkzmxwybbj","iimszlgolmfhhdabisrfcenzf","mztizykktjbpnsqgjagyhnldz","eacvxzcmnnigozbjzrazvauct","hkhkjjteoarrapbouggbahhiw","uknkzjtldsgyygjwyctxqaqwh","lduheaglipveqogteizobzxoc","ggvzcgkbngexqplfvmhpizlul","omjeoridfthannguvvhntdvom","uulivjajzfhhnhunyeqkmojrn","npofvbdqwtjfnewcjpozzmbwx","altzpuboytrkxphfnumxhxfan","scbdcfpqodxmqikioadndchsy","jfontgnoftejlunfuzvidcezt","pvohffrkmslopfhpigigfvzpi","kkhjbtzpfdgyljfgrftgnqbjz","sllgiexbwpsxfmgqttldvcnzg","exyfjlrkcioxywnauwfsumpbh","hkuzttgzjwssxxmftggubxeol","gftdpsshhaciduhwdmljinuae","uzktepjafqccyqbsqtoyvnnad","fnzrunpwibfrtkhsfvqkjowpz","gpvtlmokhpjxwvzxkvfhyfgrn","hgamrezqxpyovlkoqvezgcrlj","qslmbbunhudqnahuqqcgylroh","otchmbxeounavgfrkuzqkbqex","lcczifvmosisjerymaqvpieoq","ljvtceodrqrktbendtdstinos","jlkjnzrhaphrxeimartpxxphy","judhldzyjmfdqfsbfhonpqihc","lxrogqekurflpjkwqdfodttcu","firujuknynbfkrwblhdhvuhnn","cnnletsdehinmsyugthnuuyrm","stqcybdfqomliditbuvhvavqy","ckzjmubfhcgdmmwoijxjplxed","ttiemxdgkpaoxpdnzefudcxko","jiuqtnpnhgmyxnmcejjdzbafa","eumtsmovwqhgxsuzdvmkkdjih","irbvapivpnwigpeeykzpxphmt","czeqbkexwiyleknlgtnfwgwae","eklxclicwwcbfbeiuxpquficm","xatbwbssbbcnapobehzzlfcsm","ztnmuciopqkyqtxxbgkkczihr","heoqtjzetiuszbuokloowaqnv","vbdhkekufkwkqdqumhhzynawt","fjrqhknearpcukfaclsahmrsw","xlxxweposbstyfasishkbdbrf","qfrftyzjgtkzrrtwcacaqmxrd","ljcofosioagvqgyjxyhwabkdk","ecygwfqaaqqayzasmchpcciyg","lwnzokqggkdeavfdelbmsmopa","vzvzzohlabnugucaztiqpjnuz","hmpsvjlqrpdoujykjpjaszbyg","qecltqwdxhhtgwymcyzoegfjb","kkzpnmdohmpfwcaidqvvidhil","yorjkfvmajqogbazntfdcsxjw","ozmjrlijrcavpdquxgxsspdck","pbmnhemixfnnrxyehtvrgmcgj","hmjnhmsbeyqrclsrqnkcgvnbb","gnmjttbrssaqrxexvetvbbitl","mjeeunmjsnervdsryyohbaqwj","dbdqqvbuxumyyquawxqhtwmzw","pqlvjmbsdtcnigpzxsukzwmko","khfcvgkvzcacbvyjgxljcnsef","gttinaushwdwqszgvgnmyrrna","jawziwsmzxpemhvrehhmrpdrt","jraqsdwrhbuwtencsbrrdaocd","wcumhjpeoxtnyfmyjgidwdygz","zsupwrrbmfqxhznqvgzwncnuc","isxoessjaxelwczdrfgzvpzuf","mkvcyneoihyivzdjjyarvpptt","tblcltdkrtbnonydtvkwofhnz","bvdiheadshixavlsgzhljyvrh","wgyfxnvpdglythhclicnaspmk","jczrsbedwzgcolugcgagmpliu","hbtaozfiyuncpbxttubdjuawl","ysesrelasduqdvmqlivkemjwv","dvegpzylwacuitqstkwhexmfm","qpohxkseifqgjvzhtpvcudgbs","xnqfjgnptzygmrpkrtezkklwi","loagputwqufsnuiliwzkkswbm","qmaygqwpoluqgnluswyiqtkii","kfkgujfjnceqgnrfrhruhjbyt","hhuiezfqtimvwcuxzntfhlrne","fppfynqctklvcjofupfpppbgf","zhnjfvuqxiwlcgzdmvvvtgutp","wfojhsgkxnucxqjhotzsluesd","debcenekfzbmgwhhrapdtanmh","yjyndatsvodjcqstzrpwtohot","eahsjdyjpjmnkyjmrcarfpqfn","neawoysnozwgnpfntrgescdna","amyvbulegalkpvjwiwqiwupsr","orniwvnuhieayasqajpythnst","ckaaadehgciomnrgzwevjvncc","syvymkadfzwiolfaoovcixofd","dssksvddztfkrdasocdhthqic","vcivwcpuxpghqjprhzgteihsd","lcfuiasytbjayvaklpqmprckw","ycjvozfarxyakorbrhvchhowt","fpvstyicqmnyykqyqxrxhlxlj","puofavimwtasugazodnbbblky","nhqeihlxsygethktxbwlvnbja","xbstdokilljvqkkrjauydntpw"]
+    sub = ["wxnazzgwzlincurnioleblays", "txwrtqcaciunqdaskqbxjgqsa", "vdhzkkflociynhpowycqmrnsv",
+           "sondwiizlapibmfyyfyoaymzo", "advmnlciojurgbfdohaworgir", "gbwpprhetfmjddaqxqwmeshas",
+           "vmjcjlzasgtnrazmvfbnrfkuf", "zjxvnmfxayxlgnzssgayidibw", "xmsdwclozzurtesskdrofufkc",
+           "gglmhnnrhwaetgrelkyjrlwbx", "galldybmwzrsozbnxyvfniqyl", "ofrbxnxgnefbaueghcbqldetf",
+           "ltaczrtrtvigvpnqrncazoacp", "psacpkyhfsazmgkkadygnmnio", "mztmeoukmtmsdohlugclrjhgs",
+           "gjdaqjsxphojgoihlowfxoyih", "gpcztxizzwsfvjdmhthsdvlbb", "bksjgvvglkdtuxhlnhkymtgto",
+           "mewbjatnnylmlamrjrumfzkpx", "orsqpyotjlhlskcricbwveqec", "wsrdidpuytslzhtiheegjpskp",
+           "zehikwbrcaqagjrahnbgozsve", "lzjoyehxbbttftvpqifviafad", "phyyfungiyxvignkjkboavlgu",
+           "zdadsqaumdqnykozmbaerbiac", "zxyoruvlioevfbtvjzsdwugri", "xtvotgutpmetmoiwcxidgwwkx",
+           "cpvxtcnnvmaisoucjvehwdxst", "jfgzacxstacwrwxnrkmagvhkz", "nubrhcnrqxizwdiropfpmrmpt",
+           "rwahikxnbanqyveeafgxloepq", "zncxvbeiaxcombypgriszdywt", "ottznlgmljvbcwzxqvouezeop",
+           "rqguzqyfuclhgvoixbotkylmp", "zdsvpffvubvrhlrjkrgecxbjk", "kqbvgarsjtduvdobyduyfhumk",
+           "azhkdexxiqgkgzcfjccmmtdcy", "igcudsdkouxvqfdhinzvzphbd", "igylpaqhxlavtemfrkfbcgtzz",
+           "ezdfanpirjnmnxcjxxbccimpj", "hwydjosbxvsuqcijkiovbfvcf", "lzgwaiijmogbcrtpwmmbffzdt",
+           "fsqgolcvbncttmriivgagppbp", "hsqbiaauxzqeogwrarpfuipmp", "mxonxghsmrqazldhfhuakvdba",
+           "legajnsmaqdhfrsednjrlrhch", "eebwbgifcrjdyunprrhgzamjz", "suxzpxiruizscmubdapkvgoen",
+           "uvnekcbtcfreqywtrjiwymeqb", "pquuuvmknvsafawymztykfphw", "bhxfwbssquhcmpkwupzpuetih",
+           "pshdpvvkotfzcjrrzbarpljus", "edgdulxyofngciphxznwqnghi", "pwzrivzxmexawavglqkwgprxw",
+           "wimiohxvhtlhnzvmxdzokohbx", "sjcqalwynbjaksrcjnvccwgry", "qwfkyjeabdcrihatdbwhmzodh",
+           "thmqsvaywlqwdxuozpjddrvpw", "jdpuawgqycxavrjqxflavpzyj", "xphftvkfkvtdnskbvdaauujow",
+           "mwkcaowmafwecxdrpcwdkoxez", "rrlbbvietzvkhbeonpsqpiogh", "gyglgplsphtjuarwldnhnkrlc",
+           "sqshgljhutkbtjjjrvrtzxcdb", "ihvnmwectywomjdibfnddnsfh", "dymvirpvsqarzwiqnymiodjpn",
+           "evrocfhbeuleghbkdsobdbjdm", "sbbfnsxujdnkeyqziptzkpemt", "gmlucsfhiscphrwbvforsvnur",
+           "nfbceicqizfufcwfzjlmidhrf", "tbqxanffjiubddidfrgbyeemr", "fszmebvmvdsuiiprxkpbemcuf",
+           "ziwqcqzawkinvbcewnawezkhm", "dmolmtryfobswfrujsckykhva", "ewcflmhhprotrtnzcnbxyufad",
+           "qcebmfvorruiawoqyqrotlgnb", "qdnwpemljzmudmyiqpqxpjcsf", "xhaewbjgsdrmpencismzrqlyt",
+           "iyrrcbxvwgjwcdfagcqybywjm", "rhezwydtrswwbzavkfdriqwbe", "kljmfvnkyseotzcyrpwcfyoiy",
+           "xtygncsqeramomcgwupanqmng", "uzoegsotzycktizwzswrvmles", "fzlpchdikhotlgbllxsotxnci",
+           "rrwrxwqqzahgwhhjcvmlswdne", "xtckpftazltocgvisvhihjmsu", "aovdhambtnkvpguoyyeewwhql",
+           "qenewxnpzfhdbamfwkybxatbu", "wqvursrgkyrrmgklgtaykmpgq", "ezbwxkjxqbphoromxfepappwa",
+           "mzeqqrmcewepsrvkyvjgfhehb", "ulzbezgwrroowtoraaifaaucf", "rdxzzkdbnzyodndqvjhwmqyds",
+           "qtryvjjcrnoiirnlqdewcgvkp", "slemeueamiapngfbuskzbfaxc", "ssejwngvdgucntdadqdxhqgwd",
+           "lhgdmptbdbyptezaxgjshsnxn", "qheoqszaxbvfnshrsjtqkcwhq", "twwkkamuxcwpbylngylhcpgps",
+           "fszrvadibvxnynvkccjgftmxq", "hftqnhwfgpdislmnkzmxwybbj", "iimszlgolmfhhdabisrfcenzf",
+           "mztizykktjbpnsqgjagyhnldz", "eacvxzcmnnigozbjzrazvauct", "hkhkjjteoarrapbouggbahhiw",
+           "uknkzjtldsgyygjwyctxqaqwh", "lduheaglipveqogteizobzxoc", "ggvzcgkbngexqplfvmhpizlul",
+           "omjeoridfthannguvvhntdvom", "uulivjajzfhhnhunyeqkmojrn", "npofvbdqwtjfnewcjpozzmbwx",
+           "altzpuboytrkxphfnumxhxfan", "scbdcfpqodxmqikioadndchsy", "jfontgnoftejlunfuzvidcezt",
+           "pvohffrkmslopfhpigigfvzpi", "kkhjbtzpfdgyljfgrftgnqbjz", "sllgiexbwpsxfmgqttldvcnzg",
+           "exyfjlrkcioxywnauwfsumpbh", "hkuzttgzjwssxxmftggubxeol", "gftdpsshhaciduhwdmljinuae",
+           "uzktepjafqccyqbsqtoyvnnad", "fnzrunpwibfrtkhsfvqkjowpz", "gpvtlmokhpjxwvzxkvfhyfgrn",
+           "hgamrezqxpyovlkoqvezgcrlj", "qslmbbunhudqnahuqqcgylroh", "otchmbxeounavgfrkuzqkbqex",
+           "lcczifvmosisjerymaqvpieoq", "ljvtceodrqrktbendtdstinos", "jlkjnzrhaphrxeimartpxxphy",
+           "judhldzyjmfdqfsbfhonpqihc", "lxrogqekurflpjkwqdfodttcu", "firujuknynbfkrwblhdhvuhnn",
+           "cnnletsdehinmsyugthnuuyrm", "stqcybdfqomliditbuvhvavqy", "ckzjmubfhcgdmmwoijxjplxed",
+           "ttiemxdgkpaoxpdnzefudcxko", "jiuqtnpnhgmyxnmcejjdzbafa", "eumtsmovwqhgxsuzdvmkkdjih",
+           "irbvapivpnwigpeeykzpxphmt", "czeqbkexwiyleknlgtnfwgwae", "eklxclicwwcbfbeiuxpquficm",
+           "xatbwbssbbcnapobehzzlfcsm", "ztnmuciopqkyqtxxbgkkczihr", "heoqtjzetiuszbuokloowaqnv",
+           "vbdhkekufkwkqdqumhhzynawt", "fjrqhknearpcukfaclsahmrsw", "xlxxweposbstyfasishkbdbrf",
+           "qfrftyzjgtkzrrtwcacaqmxrd", "ljcofosioagvqgyjxyhwabkdk", "ecygwfqaaqqayzasmchpcciyg",
+           "lwnzokqggkdeavfdelbmsmopa", "vzvzzohlabnugucaztiqpjnuz", "hmpsvjlqrpdoujykjpjaszbyg",
+           "qecltqwdxhhtgwymcyzoegfjb", "kkzpnmdohmpfwcaidqvvidhil", "yorjkfvmajqogbazntfdcsxjw",
+           "ozmjrlijrcavpdquxgxsspdck", "pbmnhemixfnnrxyehtvrgmcgj", "hmjnhmsbeyqrclsrqnkcgvnbb",
+           "gnmjttbrssaqrxexvetvbbitl", "mjeeunmjsnervdsryyohbaqwj", "dbdqqvbuxumyyquawxqhtwmzw",
+           "pqlvjmbsdtcnigpzxsukzwmko", "khfcvgkvzcacbvyjgxljcnsef", "gttinaushwdwqszgvgnmyrrna",
+           "jawziwsmzxpemhvrehhmrpdrt", "jraqsdwrhbuwtencsbrrdaocd", "wcumhjpeoxtnyfmyjgidwdygz",
+           "zsupwrrbmfqxhznqvgzwncnuc", "isxoessjaxelwczdrfgzvpzuf", "mkvcyneoihyivzdjjyarvpptt",
+           "tblcltdkrtbnonydtvkwofhnz", "bvdiheadshixavlsgzhljyvrh", "wgyfxnvpdglythhclicnaspmk",
+           "jczrsbedwzgcolugcgagmpliu", "hbtaozfiyuncpbxttubdjuawl", "ysesrelasduqdvmqlivkemjwv",
+           "dvegpzylwacuitqstkwhexmfm", "qpohxkseifqgjvzhtpvcudgbs", "xnqfjgnptzygmrpkrtezkklwi",
+           "loagputwqufsnuiliwzkkswbm", "qmaygqwpoluqgnluswyiqtkii", "kfkgujfjnceqgnrfrhruhjbyt",
+           "hhuiezfqtimvwcuxzntfhlrne", "fppfynqctklvcjofupfpppbgf", "zhnjfvuqxiwlcgzdmvvvtgutp",
+           "wfojhsgkxnucxqjhotzsluesd", "debcenekfzbmgwhhrapdtanmh", "yjyndatsvodjcqstzrpwtohot",
+           "eahsjdyjpjmnkyjmrcarfpqfn", "neawoysnozwgnpfntrgescdna", "amyvbulegalkpvjwiwqiwupsr",
+           "orniwvnuhieayasqajpythnst", "ckaaadehgciomnrgzwevjvncc", "syvymkadfzwiolfaoovcixofd",
+           "dssksvddztfkrdasocdhthqic", "vcivwcpuxpghqjprhzgteihsd", "lcfuiasytbjayvaklpqmprckw",
+           "ycjvozfarxyakorbrhvchhowt", "fpvstyicqmnyykqyqxrxhlxlj", "puofavimwtasugazodnbbblky",
+           "nhqeihlxsygethktxbwlvnbja", "xbstdokilljvqkkrjauydntpw"]
+    # s1 = ""
     print(Solution().findSubstring(s, sub))
